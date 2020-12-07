@@ -132,7 +132,7 @@ class ReadInput:
             fullskillsetNearnessList.append(skillsetNearnessList)
         print(fullskillsetNearnessList)
         print(rowskillset)
-
+        self.excel_create()
         numpy_data = np.array(fullskillsetNearnessList)
         df = pandas.DataFrame(data=numpy_data, index=rowskillset, columns=rowskillset)
         self.excel_create()
@@ -154,7 +154,7 @@ class ReadInput:
         rowskillset = []
         for index in indexes:    
             self.updatecolvariables(index)
-        
+        self.excel_create()
         rowskillset = self.rowData[indexes[0]]
         rowskillset = list(set(rowskillset))
         startRow = 0
@@ -189,7 +189,7 @@ class ReadInput:
         self.rowskill = list(set(self.rowskill))
         for row in self.rowskill:
             mean_skill_dict[row] = self.mean_current_target_level(value=row)
-    
+        self.excel_create()
         print(mean_skill_dict)
         df = pandas.DataFrame.from_dict(mean_skill_dict, orient='index').T
         x = df.corr(method='pearson')
@@ -240,9 +240,9 @@ class ReadInput:
 
     def excel_create(self):
         try:
-            self.writer = pandas.ExcelWriter("Skill_Mangement.xlsx",mode="a")
+            self.writer = pandas.ExcelWriter("Skill_Mangement.xlsx",mode="a", engine = "openpyxl")
         except Exception as e:
-            self.writer = pandas.ExcelWriter("Skill_Mangement.xlsx")
+            self.writer = pandas.ExcelWriter("Skill_Mangement.xlsx", engine = "openpyxl")
 
     def skillsetNearness3var(self, inp1, inp2,inp3, index1, index2, index3):
         s1 = []
@@ -307,7 +307,7 @@ class ReadInput:
     def updateskillsetnearnessmatrix(self):
         fullskillsetNearnessList = []
         skillsetNearnessList = []
-
+        self.excel_create()
         if not self.rowskillset:
             self.updaterowvariables()
 
@@ -332,7 +332,7 @@ class ReadInput:
     def updateskillNearnessMatrix(self):
         fullskillNearnessList = []
         skillNearnessList = []
-
+        self.excel_create()
         if not self.rowskill:
             self.updaterowvariables()
 
