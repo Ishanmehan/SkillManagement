@@ -22,7 +22,25 @@ class ReadInput:
         self.excel_create()
         self.userDictFunc()
         print("Class initialized")
+        
+    def runUsecase(self,usecase,label = None):
+        self.label = label
+        if usecase == "usecase1":
+            self.updatenearnessmatrix([2,6], "usecase1")
+        elif usecase == "usecase2":
+            self.updatenearnessmatrix([6,1], "usecase2")
+        elif usecase == "usecase3":
+            self.updatenearnessmatrix3var([0, 6, 2],"usecase3")
+            
+    def updateLabel(self,max,cur):
+        com = int((cur/max)*100)
+        if self.label != None:
+            if com == 100:
+                self.label["text"] = ""
+            else:
+                self.label["text"] = "Completed :" + str(com) + "%"
 
+            
     def fetchdataframe(self, filepath):
         self.ex_df = pandas.read_excel(open(filepath, 'rb'))
 
@@ -105,7 +123,8 @@ class ReadInput:
         rowskillset = list(set(rowskillset))
         if len(listParse) != 0:
             rowskillset = listParse
-        for row in rowskillset:
+        for i,row in enumerate(rowskillset):
+            self.updateLabel(len(rowskillset),i+1)
             skillsetNearnessList = []
             for column in rowskillset:
                 skillsetNearnessList.append(self.skillsetNearness(row, column,indexes[0], indexes[1]))
@@ -143,8 +162,9 @@ class ReadInput:
         if len(listParse) == 0:
             listParse = self.rowData[indexes[2]]
         listParse = list(set(listParse))
-        for var in listParse:
+        for i,var in enumerate(listParse):
             fullskillsetNearnessList = []
+            self.updateLabel(len(listParse),i+1)
             for row in rowskillset:
                 skillsetNearnessList = []
                 for column in rowskillset:
